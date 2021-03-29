@@ -1,19 +1,39 @@
-import discord, time, random
+# CONFIG
+# -----------------------------------------------------
+token = "Your token here" # INSERT BOT TOKEN HERE
+counting_channel = "Your channel id" # INSERT CHANNEL ID HERE
+delay = [0.5, 5] # DELAY BETWEEN COUNTING
+selfbot = False # Change this if using BOT ACCOUNT
+last_number = "" # Optional, it starts counting from this number
+
+mode = "BINARY" # CHOOSE MODE OF COUNTING
+# You can choose from: INCREMENTAL or BINARY
+# -----------------------------------------------------
+
+try:
+    import discord, time, random, sys
+except ImportError as e:
+    print(e)
+    exit()
+    
 from discord.ext import commands
 
-token = "Your token here" # INSERT BOT TOKEN HERE
-prefix = "!" # INSERT PREFIX HERE
-counting_channel = "CHANNEL ID HERE" # INSERT CHANNEL ID HERE
-mode = "INCREMENTAL" # CHOOSE MODE OF COUNTING
-# Currently you can choose from:
-# INCREMENTAL, BINARY
+if sys.version_info[0] < 3:
+    print("Python 3 or a more recent version is required.")
+    exit()
 
-last_number = ""
-# The number it starts counting from
-# I dont think there is need for it usually but you can set it yourself if you really want
+if token == "Your token here" or counting_channel == "Your channel id here":
+    print("Please fill out the config!")
+    exit()
 
-bot = commands.Bot(command_prefix=prefix, self_bot=True)
+bot = commands.Bot(command_prefix='!', self_bot=selfbot)
 bot.remove_command("help")
+
+print("Logging in...")
+@bot.event
+async def on_ready():
+    print('Logged in as {0.user}, time to start counting!'.format(bot))
+    
 @bot.event
 async def on_message(message):
     global last_number
@@ -26,9 +46,7 @@ async def on_message(message):
                 last_number = int(message.content, 2)
         except:
             pass
-        else:
-            print("LAST NUMBER: " + str(last_number))
-            
+        else:            
             if mode == "INCREMENTAL" and int(message.content) < last_number:
                 print("Lower number posted, doing nothing!")
             elif mode == "INCREMENTAL" and int(message.content) > (last_number + 1):
@@ -38,18 +56,24 @@ async def on_message(message):
             elif mode == "BINARY" and int(message.content, 2) > (last_number + 1):
                 print("too high number, doing nothing!")
             else:
-                time.sleep(random.uniform(0.5, 5))
+                time.sleep(random.uniform(delay[0], delay[1]))
+                last_number += 2
                 if mode == "INCREMENTAL":
                     num = int(message.content)
                     bigger_num = num + 1
-                    last_number += 2
+                    
                     await channel.send(bigger_num)
-                    print(bigger_num)
+                    print("SENDING: " + str(bigger_num))
+                    print("NEXT NUMBER: " + str(last_number))
+                    
                 elif mode == "BINARY":
                     num = int(message.content, 2)
                     bigger_num = "{0:b}".format(num + 1)
-                    last_number += 2
+                    
                     await channel.send(bigger_num)
-                    print(bigger_num)
+                    print("SENDING: " + str(bigger_num))
+                    print("NEXT NUMBER: " + str("{0:b}".format(last_number)))
+            
 
-bot.run(token, bot=False)
+bot.run(token, bot=(not selfbot))
+print("\nExiting, have a nice day!")
