@@ -1,7 +1,7 @@
 # CONFIG
 # -----------------------------------------------------
 token = "Your token here" # INSERT BOT TOKEN HERE
-counting_channel = "Your channel id" # INSERT CHANNEL ID HERE
+counting_channel = "Your channel id here" # INSERT CHANNEL ID HERE
 delay = [0.5, 5] # DELAY BETWEEN COUNTING
 selfbot = False # Change this if using BOT ACCOUNT
 last_number = "" # Optional, it starts counting from this number
@@ -75,5 +75,8 @@ async def on_message(message):
                     print("NEXT NUMBER: " + str("{0:b}".format(last_number)))
             
 
-bot.run(token, bot=(not selfbot))
-print("\nExiting, have a nice day!")
+try:
+    bot.run(token, bot=(not selfbot))
+    print("\nExiting, have a nice day!")
+except discord.errors.LoginFailure as e:
+    print("Error: " + str(e))
