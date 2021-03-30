@@ -6,7 +6,7 @@ delay = [0.5, 5] # DELAY BETWEEN COUNTING
 selfbot = True # Change this if using BOT ACCOUNT
 last_number = "" # Optional, it starts counting from this number
 
-mode = "BINARY" # CHOOSE MODE OF COUNTING
+mode = "INCREMENTAL" # CHOOSE MODE OF COUNTING
 # You can choose from: INCREMENTAL or BINARY
 # -----------------------------------------------------
 
