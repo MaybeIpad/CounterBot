@@ -3,7 +3,7 @@
 token = "Your token here" # INSERT BOT TOKEN HERE
 counting_channel = "Your channel id here" # INSERT CHANNEL ID HERE
 delay = [0.5, 5] # DELAY BETWEEN COUNTING
-selfbot = False # Change this if using BOT ACCOUNT
+selfbot = True # Change this if using BOT ACCOUNT
 last_number = "" # Optional, it starts counting from this number
 
 mode = "BINARY" # CHOOSE MODE OF COUNTING
